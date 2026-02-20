@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import api from "./api/tasks";
+import { getTasks } from "./api/tasks";
+import { Link } from "react-router-dom";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -7,15 +8,22 @@ function Tasks() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    api.get('/tasks')
-      .then(res => setTasks(res.data))
-      .catch(err => {
+    const fetchTasks = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const res = await getTasks();
+        setTasks(res.data);
+      } catch (err) {
         console.error("Failed to fetch tasks:", err);
         setError("Could not load tasks. Please try again later.");
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchTasks();
   }, []);
 
   return (
@@ -53,6 +61,15 @@ function Tasks() {
           ))}
         </ul>
       )}
+
+      <div className="flex justify-between items-center mt-8">
+        <Link
+          to="/tasks/create"
+          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition"
+        >
+          <span className="text-white">Add New Task</span>
+        </Link>
+      </div>
     </div>
   );
 }

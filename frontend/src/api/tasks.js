@@ -5,4 +5,10 @@ const api = axios.create({
   timeout: 5000,
 });
 
-export default api;
+export const getTasks = () => {
+  return api.get("/tasks");
+};
+
+export const createTask = (taskData) => {
+  return api.post("/tasks", taskData);
+};
