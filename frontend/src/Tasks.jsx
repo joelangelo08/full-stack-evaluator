@@ -3,6 +3,7 @@ import api from "./api/tasks";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -11,6 +12,9 @@ function Tasks() {
       .catch(err => {
         console.error("Failed to fetch tasks:", err);
         setError("Could not load tasks. Please try again later.");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -18,11 +22,16 @@ function Tasks() {
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Tasks</h2>
 
-      {/* Error handling */}
-      {error ? (
-        <p className="text-red-500 text-center">{error}</p>
+      {loading ? (
+        // Loading spinner
+        <div className="flex justify-center items-center mt-10">
+          <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+        </div>
+      ) : error ? (
+        // Error handling
+        <p className="text-center text-red-500">{error}</p>
       ) : tasks.length === 0 ? (
-        <p className="text-gray-500 text-center">No tasks available.</p>
+        <p className="text-center text-gray-500">No tasks available.</p>
       ) : (
 
         <ul className="space-y-4">
