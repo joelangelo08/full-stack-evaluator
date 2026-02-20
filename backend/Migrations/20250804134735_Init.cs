@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Microsoft.AspNetCore.Identity;
 
 #nullable disable
 
@@ -50,6 +51,21 @@ namespace task_manager_api.Migrations
                 name: "IX_Tasks_UserId",
                 table: "Tasks",
                 column: "UserId");
+
+            // Hasher package
+            var hasher = new PasswordHasher<object>();
+            var TestPassword = hasher.HashPassword(null, "Test123!");
+            var SamplePassword = hasher.HashPassword(null, "Sample123!");
+
+            // Added data for users
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Email", "PasswordHash" },
+                values: new object[,]
+                {
+                    { "joelangelo.milanez@gmail.com", TestPassword },
+                    { "sample_email@gmail.com", SamplePassword }
+                });
         }
 
         /// <inheritdoc />
