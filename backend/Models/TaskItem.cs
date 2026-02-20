@@ -6,6 +6,8 @@ namespace TaskManager.Models
         public string Title { get; set; } = string.Empty;
         public bool IsDone { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; } = null!;
+        
+        // This parameter is not needed in database
+        // public User User { get; set; } = null!;
     }
 }
